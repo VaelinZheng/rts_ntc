@@ -21,7 +21,7 @@ typedef enum
     RTS_NTC_ERROR
 }rts_ntc_error_t;
 
-void rts_ntc_init(uint16_t *adc_tab,uint16_t tab_len,int16_t offset_tempX10);
+void rts_ntc_init(uint16_t const *adc_tab,uint16_t tab_len,int16_t offset_tempX10);
 rts_ntc_error_t rts_ntc_adc_to_temp(uint16_t adc_val,int16_t *tempX10);
 
 #endif

@@ -13,7 +13,7 @@
 #include "stdint.h"
 #include "stdio.h"
 
-static uint16_t *_adc_tab=0;
+static uint16_t const *_adc_tab=0;
 static uint16_t _tab_len=0;
 static int16_t _offset_tempX10=0;
 
@@ -22,7 +22,7 @@ static int16_t _offset_tempX10=0;
  * tab_len : adc_tab数组的长度
  * offset_tempX10 : 开始的温度
  */
-void rts_ntc_init(uint16_t *adc_tab,uint16_t tab_len,int16_t offset_tempX10)
+void rts_ntc_init(uint16_t const *adc_tab,uint16_t tab_len,int16_t offset_tempX10)
 {
     _adc_tab=adc_tab;
     _tab_len=tab_len;
@@ -52,14 +52,14 @@ rts_ntc_error_t rts_ntc_adc_to_temp(uint16_t adc_val,int16_t *tempX10)
             temp *=10;
             temp += ((_adc_tab[i-1]-adc_val)*10)/(_adc_tab[i-1]-_adc_tab[i]);//小数部分
 
-            *tempX10=temp;
+            *tempX10=temp+_offset_tempX10;
             return RTS_NTC_OK;
         }
         else if(adc_val==_adc_tab[i])
         {
             temp=i; //温度整数部分
 
-            *tempX10=temp*10;
+            *tempX10=temp*10+_offset_tempX10;
             return RTS_NTC_OK;
         }
     }
