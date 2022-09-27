@@ -1,0 +1,16 @@
+//=======================================================
+// <e>RTS_NTC_ENABLE
+#ifndef RTS_NTC_ENABLE
+#define RTS_NTC_ENABLE                      0
+#endif
+
+// <o>RTS_NTC_IS_NTC_AT_UPPER
+//      <i> Default:NO
+//      <0=> NO
+//      <1=> YES
+#ifndef RTS_NTC_IS_NTC_AT_UPPER
+#define RTS_NTC_IS_NTC_AT_UPPER             1
+#endif
+
+// </e>
+//=======================================================
