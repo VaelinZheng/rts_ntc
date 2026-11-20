@@ -26,14 +26,16 @@ extern "C" {
 
 #define RTS_NTC_VERSION_MAJOR  (0)
 #define RTS_NTC_VERSION_MINOR  (2)
-#define RTS_NTC_VERSION_PATCH  (0)
+#define RTS_NTC_VERSION_PATCH  (1)
 #define RTS_NTC_VERSION        ((RTS_NTC_VERSION_MAJOR << 16) | (RTS_NTC_VERSION_MINOR << 8) | (RTS_NTC_VERSION_PATCH))
 
 typedef enum
 {
-    RTS_NTC_OK=0,
-    RTS_NTC_ERROR
-}rts_ntc_error_t;
+    RTS_NTC_OK = 0,
+    RTS_NTC_ERROR,
+    RTS_NTC_ADC_BELOW_MIN, // ADC value is below the lookup table range.
+    RTS_NTC_ADC_ABOVE_MAX, // ADC value is above the lookup table range.
+} rts_ntc_error_t;
 
 typedef struct
 {

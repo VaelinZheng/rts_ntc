@@ -57,8 +57,13 @@ void test_out_of_range(void)
     int16_t temperature = 123;
 
     TEST_ASSERT_EQUAL(RTS_NTC_OK, rts_ntc_init(&ntc, adc_tab, 3U, -200));
-    TEST_ASSERT_EQUAL(RTS_NTC_ERROR, rts_ntc_adc_to_temp(&ntc, 99U, &temperature));
-    TEST_ASSERT_EQUAL(RTS_NTC_ERROR, rts_ntc_adc_to_temp(&ntc, 301U, &temperature));
+#if CONFIG_RTS_NTC_IS_NTC_AT_UPPER
+    TEST_ASSERT_EQUAL(RTS_NTC_ADC_BELOW_MIN, rts_ntc_adc_to_temp(&ntc, 99U, &temperature));
+    TEST_ASSERT_EQUAL(RTS_NTC_ADC_ABOVE_MAX, rts_ntc_adc_to_temp(&ntc, 301U, &temperature));
+#else
+    TEST_ASSERT_EQUAL(RTS_NTC_ADC_ABOVE_MAX, rts_ntc_adc_to_temp(&ntc, 301U, &temperature));
+    TEST_ASSERT_EQUAL(RTS_NTC_ADC_BELOW_MIN, rts_ntc_adc_to_temp(&ntc, 99U, &temperature));
+#endif
     TEST_ASSERT_EQUAL_INT16(123, temperature);
 }
 

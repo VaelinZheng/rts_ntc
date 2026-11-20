@@ -38,7 +38,8 @@ rts_ntc_error_t rts_ntc_init(rts_ntc_t *self, uint16_t const *adc_tab, uint16_t 
  * @param self     Initialized NTC conversion instance.
  * @param adc_val  ADC reading within the lookup table range.
  * @param tempX10  Receives the temperature in tenths of a degree Celsius.
- * @return RTS_NTC_OK on success; otherwise RTS_NTC_ERROR.
+ * @return RTS_NTC_OK on success; RTS_NTC_ADC_ABOVE_MAX or
+ *         RTS_NTC_ADC_BELOW_MIN when out of range; otherwise RTS_NTC_ERROR.
  */
 rts_ntc_error_t rts_ntc_adc_to_temp(const rts_ntc_t *self, uint16_t adc_val, int16_t *tempX10)
 {
@@ -50,9 +51,14 @@ rts_ntc_error_t rts_ntc_adc_to_temp(const rts_ntc_t *self, uint16_t adc_val, int
         return RTS_NTC_ERROR;
     }
 
-    if((adc_val > self->adc_tab[self->tab_item_num - 1U]) || (adc_val < self->adc_tab[0]))
+    if (adc_val < self->adc_tab[0])
     {
-        return RTS_NTC_ERROR;
+        return RTS_NTC_ADC_BELOW_MIN;
+    }
+
+    if (adc_val > self->adc_tab[self->tab_item_num - 1U])
+    {
+        return RTS_NTC_ADC_ABOVE_MAX;
     }
 
     for(i=0; i<self->tab_item_num; i++)
@@ -85,7 +91,8 @@ rts_ntc_error_t rts_ntc_adc_to_temp(const rts_ntc_t *self, uint16_t adc_val, int
  * @param self     Initialized NTC conversion instance.
  * @param adc_val  ADC reading within the lookup table range.
  * @param tempX10  Receives the temperature in tenths of a degree Celsius.
- * @return RTS_NTC_OK on success; otherwise RTS_NTC_ERROR.
+ * @return RTS_NTC_OK on success; RTS_NTC_ADC_BELOW_MIN or
+ *         RTS_NTC_ADC_ABOVE_MAX when out of range; otherwise RTS_NTC_ERROR.
  */
 rts_ntc_error_t rts_ntc_adc_to_temp(const rts_ntc_t *self, uint16_t adc_val, int16_t *tempX10)
 {
@@ -97,9 +104,14 @@ rts_ntc_error_t rts_ntc_adc_to_temp(const rts_ntc_t *self, uint16_t adc_val, int
         return RTS_NTC_ERROR;
     }
 
-    if((adc_val > self->adc_tab[0]) || (adc_val < self->adc_tab[self->tab_item_num - 1U]))
+    if (adc_val > self->adc_tab[0])
     {
-        return RTS_NTC_ERROR;
+        return RTS_NTC_ADC_ABOVE_MAX;
+    }
+
+    if (adc_val < self->adc_tab[self->tab_item_num - 1U])
+    {
+        return RTS_NTC_ADC_BELOW_MIN;
     }
 
     for(i=0; i<self->tab_item_num; i++)
